@@ -75,6 +75,28 @@ void get_target_from_diff(unsigned char *result, uint64_t diff) {
 	}
 }
 
+/* truediffone == 0x00000000FFFF0000000000000000000000000000000000000000000000000000 */
+static const double truediffone = 26959535291011309493156476344723991336010898738574164086137773096960.0;
+
+/* Converts a little endian 256 bit value to a double */
+static double le256todouble(const unsigned char *target) {
+	double dcut64 = 0;
+	for (int i = 31; i >= 0; i--) {
+		dcut64 = dcut64 * 256 + target[i];
+	}
+	return dcut64;
+}
+
+/* Return a difficulty from a binary target */
+double diff_from_target(unsigned char *target) {
+	double d64, dcut64;
+
+	d64 = truediffone;
+	dcut64 = le256todouble(target);
+	if (dcut64 < 1) dcut64 = 1;
+	return d64 / dcut64;
+}
+
 void datum_utils_init(void) {
 	build_hex_lookup();
 }

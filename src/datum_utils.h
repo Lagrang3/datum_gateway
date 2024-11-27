@@ -70,6 +70,7 @@ unsigned char floorPoT(uint64_t x);
 uint64_t datum_siphash(const void *src, uint64_t sz, const unsigned char key[16]);
 uint64_t datum_siphash_mod8(const void *src, uint64_t sz, const unsigned char key[16]);
 
+double diff_from_target(unsigned char *target);
 
 static inline
 uint8_t upk_u8(const void * const bufp, const int offset)

@@ -240,6 +240,8 @@ typedef struct {
 	uint64_t share_diff_rejected;
 	uint64_t share_count_rejected;
 	
+	double best_difficulty;
+
 	// for vardiff
 	uint64_t share_count_since_snap;
 	uint64_t share_diff_since_snap;
@@ -281,6 +283,7 @@ void datum_stratum_v1_socket_thread_client_new(T_DATUM_CLIENT_DATA *c);
 int datum_stratum_v1_global_subscriber_count(void);
 double datum_stratum_v1_est_total_th_sec(void);
 void datum_stratum_v1_shutdown_all(void);
+double datum_stratum_v1_get_client_difficulty(int);
 
 extern T_DATUM_SOCKET_APP *global_stratum_app;
 

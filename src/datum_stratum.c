@@ -306,6 +306,27 @@ int datum_stratum_v1_global_subscriber_count(void) {
 	return kk;
 }
 
+double datum_stratum_v1_get_client_difficulty(int client){
+	int j, kk, ii;
+	T_DATUM_MINER_DATA *m;
+
+	kk = 0;
+	for(j=0;j<global_stratum_app->max_threads;j++) {
+		for(ii=0;ii<global_stratum_app->max_clients_thread;ii++) {
+			if (global_stratum_app->datum_threads[j].client_data[ii].fd > 0) {
+				m = global_stratum_app->datum_threads[j].client_data[ii].app_client_data;
+				if (m->subscribed){
+					if(kk==client)
+						return m->best_difficulty;
+					kk++;
+				}
+			}
+		}
+	}
+
+	return 0.0;
+}
+
 // TODO: Make this more accurate by tracking work over a longer period of time per user
 double datum_stratum_v1_est_total_th_sec(void) {
 	double hr;
@@ -1297,6 +1318,11 @@ int client_mining_submit(T_DATUM_CLIENT_DATA *c, uint64_t id, json_t *params_obj
 	stratum_update_miner_stats_accepted(c,quickdiff?m->quickdiff_value:m->stratum_job_diffs[g_job_index]);
 	stratum_update_vardiff(c,false);
 	
+	// update best difficulty
+	double diff = diff_from_target(share_hash);
+	if( m->best_difficulty < diff)
+		m->best_difficulty = diff;
+
 	return 0;
 }
 

@@ -212,6 +212,9 @@ int main(int argc, char **argv) {
 		if (i>=600) { // Roughly every 5 minutes spit out some stats to the log
 			i = datum_stratum_v1_global_subscriber_count();
 			DLOG_INFO("Server stats: %d client%s / %.2f Th/s", i, (i!=1)?"s":"", datum_stratum_v1_est_total_th_sec());
+			for(int ii=0;ii<i;ii++){
+				DLOG_INFO("client %d's best difficulty: %e", ii, datum_stratum_v1_get_client_difficulty(ii));
+			}
 			i=0;
 		}
 		
